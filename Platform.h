@@ -1,14 +1,17 @@
-#pragma once
 #ifndef PLATFORM_H 
 #define PLATFORM_H
-#include "GameObject.h"
+#include "SDLGameObject.h"
 
-class Platform : public GameObject
+class Platform : public SDLGameObject
 {
 
 public:
-	Platform(int speedChange);
+	Platform(const LoaderParams* pParams);
+	void setSpeed(int speedChange);
 	int getSpeedMult();
+	virtual void draw();
+	virtual void update();
+	virtual void clean();
 
 private:
 	int m_ChangeSpeed;

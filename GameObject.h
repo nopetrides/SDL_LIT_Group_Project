@@ -1,32 +1,27 @@
-#pragma once
-#ifndef GAME_OBJECT_H
-#define GAME_OBJECT_H
-#include "SDL.h"
-#include <string>
+//
+//  GameObject.h
+//  SDL Game Programming Book
+//
+//  Created by shaun mitchell on 31/12/2012.
+//  Copyright (c) 2012 shaun mitchell. All rights reserved.
+//
 
+#ifndef SDL_Game_Programming_Book_GameObject_h
+#define SDL_Game_Programming_Book_GameObject_h
+
+#include <iostream>
+#include "SDL.h"
+#include "LoaderParams.h"
 class GameObject
 {
 public:
-	GameObject(std::string typeID = "Base Game Object");
-	virtual void update();
-
-	int GetX();
-	int GetY();
-	int GetSpeed();
-	int GetHealth();
-	void increaseX(int arg);
-	void increaseY(int arg);
+	virtual void draw()=0; //pure virtual function
+	virtual void update()=0;//pure virtual function
+	virtual void clean()=0;//pure virtual function
 
 protected:
-	int m_X;
-	int m_Y;
-	std::string m_TypeID;
-	int m_Health;
-	float m_Speed;
+	GameObject(const LoaderParams* pParams) {}
+	virtual ~GameObject() {}
 };
 
-
-
-
-
-#endif
+#endif /* defined(__SDL_Game_Programming_Book__Chapter_3_GameObject__) */
