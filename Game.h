@@ -1,84 +1,80 @@
 #ifndef __Game__
 #define __Game__
-#include "Menu.h"
-#include "Player.h"
-#include "Platform.h"
+#include "SDL.h"
+#include "TextureManager.h"
+#include "SDLGameObject.h"
 #include "SDL_mixer.h"
-#include "TTF_Controller.h"
-
+#include "Player.h"
+#include "Enemy.h"
+#include <iostream>
+#include <vector>
+#include "GameStateMachine.h"
 class Game
 {
 private:
-	//Player
-	SDL_Rect m_PlayerSrc; // the first rectangle
-	SDL_Rect m_PlayerDst; // another rectangle
-	SDL_Texture* m_PlayerTexture; // Texture for turning transferring images to their surfaces
-	SDL_Surface* m_PlayerSurface;
+	Game() {};
 
-	//Background
-	SDL_Rect m_BackgroundSrc;
-	SDL_Rect m_BackgroundDst;
-	SDL_Texture* m_BackgroundTexture;
-	SDL_Surface* m_BackgroundSurface;
-	
-	//Platform
-	SDL_Rect m_PlatformSrc;
-	SDL_Rect m_PlatformDst;
-	SDL_Texture* m_PlatformTexture;
-	SDL_Surface* m_PlatformSurface;
-
-	//Controller Obj
-	SDL_GameController* gameController = nullptr;
-
-	SDL_Joystick *joystick;
-
-	//Font
-	SDL_Surface *textSurface;
-	TTF_Font *myFont; //Create pointer to Font object
-	SDL_Color white;
+	// create the s_pInstance member variable
+	static Game* s_pInstance;
 
 	
-
-	SDL_Window* m_pWindow; //Window to Render to
-	SDL_Renderer* m_pRenderer; // Renderer
-
-	//Music 
-	// MUSIC VARIABLES
-	Mix_Chunk *gSoundFX; // SOUND BYTE
-	Mix_Music *gMusic; // BACKGROUND MUSIC
+	SDL_Window* m_pWindow;
+	SDL_Renderer* m_pRenderer;
+	int m_currentFrame;
 	
+/*	GameObject* m_player;
+	GameObject* m_player2;
+	GameObject* m_enemy1;
+	GameObject* m_enemy2;
+	GameObject* m_enemy3;
+*/
+	std::vector<GameObject*> m_gameObjects;
+	GameStateMachine* m_pGameStateMachine;
+
 
 	bool m_bRunning;
-	bool m_Right = false;
-	bool m_Left = false;
-
 public:
-	
-	
-	Player* p_Player = new Player(0, 200, 100, 1);
-	Platform* p_Plat1 = new Platform(1);
+	static Game* Instance()
+	{
+		if(s_pInstance == 0)
+		{
+			s_pInstance = new Game();
+			return s_pInstance;
+		}
+		return s_pInstance;
+	}
 
-	TTF_Controller* fontController = new TTF_Controller();
-	SDL_Rect m_TimerSrc;
-	SDL_Rect m_TimerDst;
-	SDL_Texture* m_TimerTexture;
 
-	float collisionZone = 5.0f; // Used to check if the player is within a certain distance from a platform. 
+//	Game() {}
+	~Game() {}
+
 	// simply set the running variable to true
 	bool init(const char* title, int xpos, int ypos, int width,int height, bool fullscreen);
-	bool playerOnTop(SDL_Rect player, SDL_Rect b);
+
+	 SDL_Renderer* getRenderer() const { return m_pRenderer; }
+	 GameStateMachine* getStateMachine(){ return m_pGameStateMachine; }
+
 	void render();
 	void update();
 	void handleEvents();
 	void clean();
-
-	const int SCREEN_WIDTH = 9;
-	const int SCREEN_HEIGHT = 10;
+	void draw();
+	void quit();
 
 	// a function to access the private running variable
 	bool running() { return m_bRunning; }
 
+	// MUSIC VARIABLES
+	Mix_Chunk *gSoundFX; // SOUND BYTE
+	Mix_Music *gMusic; // BACKGROUND MUSIC	
+
+	bool SoundOn = true;
+	int NumPlayers = 0;
+	int level = 0;
 
 };
+// create the typedef
+	typedef Game TheGame;
+
 #endif /* defined(__Game__) */
 

@@ -1,37 +1,24 @@
-#pragma once
-#ifndef PLAYER_H
-#define PLAYER_H
-#include "SDL.h"
-#include "GameObject.h"
+#ifndef SDL_Game_Programming_Book_Player_h
+#define SDL_Game_Programming_Book_Player_h
 
-class Player : public GameObject
+#include <iostream>
+#include "SDLGameObject.h"
+#include "InputHandler.h"
+
+
+class Player : public SDLGameObject
 {
 public:
-
-	Player(int x, int y, int health, float speed);
-	void init();
-	void update(); // Checks for player input and handles Dst and Src rects.
+	Player(const LoaderParams* pParams);
 	void jump();
-	void dash();
-	void grapple();
-	void movement();
-	int gravity = 1;
+	virtual void draw();
+	virtual void update();
+	virtual void clean();
 
-	bool isJumping = false;
-
-	//Rect prototypes. 
-	SDL_Rect m_PlayerSrc; // the first rectangle
-	SDL_Rect m_PlayerDst; // another rectangle
-
-	//Texture for surface migration
-	SDL_Texture* m_pTexture; // Texture for turning transferring images to thier surfaces
-protected:
-
-
+private:
+	void handleInput(); //page 89
+	int gravity = 10;
+	bool jumping = true;
 };
-
-
-
-
 
 #endif
